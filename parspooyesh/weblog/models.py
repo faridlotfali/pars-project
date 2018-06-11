@@ -9,3 +9,4 @@ class Post(models.Model):
 class Comment(models.Model):
     comment = models.ForeignKey(Post, on_delete=models.CASCADE)
     comment_text = models.CharField(max_length=200)
+    votes =  models.IntegerField(default=0)

@@ -1,8 +1,9 @@
 from django.shortcuts import render,get_object_or_404
-from django.http import HttpResponse,Http404
+from django.http import HttpResponse,Http404,HttpResponseRedirect
 from django.template import loader
+from django.urls import reverse
 
-from .models import Post
+from .models import Post,Comment
 
 def index(request):
     latest_post_list = Post.objects.order_by('-pub_date')[:5]
@@ -32,4 +33,19 @@ def results(request, post_id):
 
 
 def vote(request, post_id):
-    return HttpResponse("You're commenting on post %s." % post_id)
+    post = get_object_or_404(Post, pk=post_id)
+    try:
+        selected_comment = post.comment_set.get(pk=request.POST['comment'])
+    except (KeyError, Comment.DoesNotExist):
+        # Redisplay the question voting form.
+        return render(request, 'weblog/detail.html', {
+            'post': post,
+            'error_message': "You didn't select a choice.",
+        })
+    else:
+        selected_comment.votes += 1
+        selected_comment.save()
+        # Always return an HttpResponseRedirect after successfully dealing
+        # with POST data. This prevents data from being posted twice if a
+        # user hits the Back button.
+        return HttpResponseRedirect(reverse('weblog:results', args=(post.id,)))
