@@ -54,7 +54,6 @@ def vote(request, post_id):
     try:
         selected_comment = post.comment_set.get(pk=request.POST['comment'])
     except (KeyError, Comment.DoesNotExist):
-        # Redisplay the post voting form.
         return render(request, 'weblog/detail.html', {
             'post': post,
             'error_message': "You didn't select a choice.",
@@ -62,7 +61,4 @@ def vote(request, post_id):
     else:
         selected_comment.votes += 1
         selected_comment.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
         return HttpResponseRedirect(reverse('weblog:results', args=(post.id,)))
