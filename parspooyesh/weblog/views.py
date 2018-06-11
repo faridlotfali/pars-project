@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render,get_object_or_404
+from django.http import HttpResponse,Http404
 from django.template import loader
 
 from .models import Post
@@ -17,8 +17,13 @@ def index(request):
 
 
 
-def detail(request, post_id):
-    return HttpResponse("You're looking at question %s." % post_id)
+def detail(request,post_id):
+    # try:
+    #    post = Post.objects.get(pk=post_id)
+    # except Post.DoesNotExist:
+        # raise Http404("post does not exist") #next line is shortcut
+    post = get_object_or_404(Post, pk=post_id) 
+    return render(request, 'weblog/detail.html', {'post':post})
 
 
 def results(request, post_id):
