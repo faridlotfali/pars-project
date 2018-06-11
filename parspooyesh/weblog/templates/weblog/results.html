@@ -1,10 +1,29 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'weblog/css/bootstrap.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'weblog/css/main.css' %}" />
+<script src="{% static 'weblog/js/bootstrap.min.js' %}"></script>
 
-<h1>{{ post.post_text }}</h1>
+<div class="basic">
+    {% include "./header.html" %}    
+</div>
+<div class="results container">
+    <div class="row">
+        <div class="col-12">
+        <h1>{{ post.post_text }}</h1>
+        </div>   
+        <div class="col-12">
+        <ul>
+            <div class="row">
+            {% for comment in post.comment_set.all %}
+            <div class="col-md-12">
+                <li>{{ comment.comment_text }} -- {{ comment.votes }} vote{{ comment.votes|pluralize }}</li>
+            </div>    
+            {% endfor %}
+            </div>  
+        </ul>
+    </div>      
+        <a href="{% url 'weblog:detail' post.id %}">Vote again?</a>
+    </div>
+</div>
 
-<ul>
-{% for comment in post.comment_set.all %}
-    <li>{{ comment.comment_text }} -- {{ comment.votes }} vote{{ comment.votes|pluralize }}</li>
-{% endfor %}
-</ul>
 
-<a href="{% url 'weblog:detail' post.id %}">Vote again?</a>

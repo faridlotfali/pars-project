@@ -1,12 +1,27 @@
-<h1>{{ post.post_text }}</h1>
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'weblog/css/bootstrap.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'weblog/css/main.css' %}" />
+<script src="{% static 'weblog/js/bootstrap.min.js' %}"></script>
+<div class="basic">
+    {% include "./header.html" %}    
+</div>
 
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<div class="detail container">
+    <div class="row">
+        <div class="col-12">
+            <h1>{{ post.post_text }}</h1>
+        </div>    
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        <div class="row col-12">
+        <form action="{% url 'weblog:vote' post.id %}" method="post">   
+        {% csrf_token %}
+        {% for comment in post.comment_set.all %}
+            <input type="radio" name="comment" id="comment{{ forloop.counter }}" value="{{ comment.id }}" />
+            <label for="comment{{ forloop.counter }}">{{ comment.comment_text }}</label><br />
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">vote</button>
+        </form>
+        </div>
+    </div>
+</div>
 
-<form action="{% url 'weblog:vote' post.id %}" method="post">
-{% csrf_token %}
-{% for comment in post.comment_set.all %}
-    <input type="radio" name="comment" id="comment{{ forloop.counter }}" value="{{ comment.id }}" />
-    <label for="comment{{ forloop.counter }}">{{ comment.comment_text }}</label><br />
-{% endfor %}
-<input type="submit" value="comment" />
-</form>

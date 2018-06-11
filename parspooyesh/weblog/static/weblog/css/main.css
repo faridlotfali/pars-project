@@ -1,0 +1,11 @@
+.posts,.results,.detail{
+  margin-top: 50px;
+}
+
+ul{
+  list-style: none;
+}
+li a {
+  color: green;
+  text-decoration: none;
+}

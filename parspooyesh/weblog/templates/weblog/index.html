@@ -1,9 +1,22 @@
-{% if latest_post_list %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'weblog/css/bootstrap.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'weblog/css/main.css' %}" />
+<script src="{% static 'weblog/js/bootstrap.min.js' %}"></script>
+<div class="basic">
+    {% include "./header.html" %}    
+</div>
+<div class="posts container">
+    <div class="row">
+    {% if latest_post_list %}
     <ul>
     {% for post in latest_post_list %}
         <li><a href="{%  url 'weblog:detail' post.id %}">{{ post.post_text }}</a></li>
     {% endfor %}
     </ul>
-{% else %}
+    {% else %}
     <p>No post are available.</p>
-{% endif %}
+    {% endif %}
+    </div>
+</div>
+
+
