@@ -1,11 +1,20 @@
-.posts,.results,.detail{
-  margin-top: 50px;
-}
 
 ul{
   list-style: none;
 }
 li a {
-  color: green;
+  padding-left: 1em;
+  color: #495057;
   text-decoration: none;
+}
+label{
+  font-weight: 600;
+}
+.container{
+  padding-top: 20px;
+}
+.posts ul{
+  width: 100%; 
+  padding: 0 2em 0 0;
+  margin: 0;
 }

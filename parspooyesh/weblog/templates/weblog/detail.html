@@ -1,11 +1,5 @@
-{% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'weblog/css/bootstrap.min.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'weblog/css/main.css' %}" />
-<script src="{% static 'weblog/js/bootstrap.min.js' %}"></script>
-<div class="basic">
-    {% include "./header.html" %}    
-</div>
-
+{% extends 'weblog/base.html' %}
+{% block content %} 
 <div class="detail container">
     <div class="row">
         <div class="col-12">
@@ -24,4 +18,4 @@
         </div>
     </div>
 </div>
-
+{% endblock %}

@@ -1,22 +1,52 @@
-{% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'weblog/css/bootstrap.min.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'weblog/css/main.css' %}" />
-<script src="{% static 'weblog/js/bootstrap.min.js' %}"></script>
-<div class="basic">
-    {% include "./header.html" %}    
-</div>
-<div class="posts container">
+{% extends 'weblog/base.html' %}
+{% block content %} 
+<div class="container">
     <div class="row">
-    {% if latest_post_list %}
-    <ul>
-    {% for post in latest_post_list %}
-        <li><a href="{%  url 'weblog:detail' post.id %}">{{ post.post_text }}</a></li>
-    {% endfor %}
-    </ul>
-    {% else %}
-    <p>No post are available.</p>
-    {% endif %}
+    <div class="col-md-8 col-sm-12">
+        <div class="row posts">
+        {% if latest_post_list %}
+        <ul>
+        {% for post in latest_post_list %}
+            <li>
+                <h3>{{ post.post_title }}</h3>
+                <a href="{%  url 'weblog:detail' post.id %}">{{ post.post_text }}</a>
+            </li>
+            <hr>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <p>No post are available.</p>
+        {% endif %}
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-12">
+    <div class="row Search-pannel">      
+      <form>
+            <div class="form-group">
+              <label for="category" class="text-dark">Category</label>
+              <select class="form-control" id="category">
+                <option>All</option>
+                <option>Posts</option>
+                <option>Comments</option>
+                <option>Most voted</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="designer">Author</label>
+              <input type="text" class="form-control" id="designer" placeholder="Enter Author name">
+            </div>
+            <div class="form-group">
+              <label for="contain_word">Contains Words</label>
+              <input type="text" class="form-control" id="contain_word" placeholder="Enter contain words">
+            </div>
+            <hr>
+            <div class="form-group text-center">
+              <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+          </form>  
+    </div>
     </div>
 </div>
-
+</div>
+{% endblock %}
 
