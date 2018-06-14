@@ -4,19 +4,25 @@ from django.template import loader
 from django.urls import reverse
 from django.views import generic
 
-from .models import Post,Comment
+from .models import Post,Comment,slider
 
-# def index(request):
-#     latest_post_list = Post.objects.order_by('-pub_date')[:5]
-#     # output = ', '.join([p.post_text for p in latest_post_list])
-#     # return HttpResponse(output)
-#     # template = loader.get_template('weblog/index.html') next code is shortcut
-#     context = {
-#         'latest_post_list': latest_post_list,
-#     }
-#     # return HttpResponse(template.render(context,request)) next code is shortcut
-#     return  render(request,'weblog/index.html',context)
-
+def index(request):
+    latest_post_list = Post.objects.order_by('-pub_date')[:5]
+    slide = []
+    for data in slider.objects.all(): 
+        # slide = Post.objects.filter(pk = data)
+        print( list(Post.objects.filter(pk = data.image_id)) ) 
+        slide.append (list(Post.objects.filter(pk = data.image_id))[0] )
+    # slide = Post.objects.filter(pk = 1)
+    # output = ', '.join([p.post_text for p in latest_post_list])
+    # return HttpResponse(output)
+    # template = loader.get_template('weblog/index.html') next code is shortcut
+    context = {
+        'latest_post_list': latest_post_list,
+        'slider' : slide,
+    }
+    # return HttpResponse(template.render(context,request)) next code is shortcut
+    return  render(request,'weblog/index.html',context)
 
 
 # def detail(request,post_id):
@@ -33,13 +39,20 @@ from .models import Post,Comment
 #     return render(request, 'weblog/results.html', {'post': post})
 
 
-class IndexView(generic.ListView):
-    template_name = 'weblog/index.html'
-    context_object_name = 'latest_post_list'
+# class IndexView(generic.ListView):
+#     template_name = 'weblog/index.html'
+#     context_object_name = 'latest_post_list'
 
-    def get_queryset(self):
-        """Return the last five published posts."""
-        return Post.objects.order_by('-pub_date')[:5]
+#     def get_queryset(self):
+#         """Return the last five published posts."""
+#         context=dict()
+#         context['latest_post_list']=Post.objects.order_by('-pub_date')[:5]
+#         context['slider']=slider.objects.all()
+#         # context['slider']=post.slider_set.get(pk=request.POST['comment'])
+#         print(context)
+#         return context['latest_post_list'] 
+
+        
 
 class DetailView(generic.DetailView):
     model = Post

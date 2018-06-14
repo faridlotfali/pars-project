@@ -18,3 +18,21 @@ label{
   padding: 0 2em 0 0;
   margin: 0;
 }
+.posts img{
+  width: 20%;
+  float: left;
+  padding: .5em 1em;
+}
+.posts a{
+  height:60px;
+  line-height:20px; /* Height / no. of lines to display */
+  overflow:hidden;
+  display: block;
+}
+.carousel-inner img{
+  height: 50%;
+  width: 100%; 
+}
+.carousel{
+  margin-bottom: 2em;
+}
