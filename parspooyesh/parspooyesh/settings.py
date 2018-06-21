@@ -125,3 +125,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_ROOT  = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'   
+
+LOGIN_URL = 'weblog:login'
+LOGOUT_URL = 'weblog:logout'
+LOGIN_REDIRECT_URL = 'weblog:index'

@@ -3,7 +3,6 @@ ul{
   list-style: none;
 }
 li a {
-  padding-left: 1em;
   color: #495057;
   text-decoration: none;
 }
@@ -35,4 +34,8 @@ label{
 }
 .carousel{
   margin-bottom: 2em;
+}
+#Hiusername{
+  float: left;
+  margin: 0;
 }
