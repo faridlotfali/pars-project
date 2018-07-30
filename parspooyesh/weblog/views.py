@@ -3,8 +3,10 @@ from django.http import HttpResponse,Http404,HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
 from django.views import generic
+
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
+from  weblog.forms import SignUpForm
 # from django.contrib.auth.decorators import login_required
 
 from .models import Post,Comment,slider
@@ -29,16 +31,19 @@ def index(request):
 
 def signup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            user.refresh_from_db()
+            user.profile.birth_date = form.cleaned_data.get('birth_data')
+            user.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
             return redirect('weblog:index')
     else:
-        form = UserCreationForm()
+        form = SignUpForm()
     return render(request, 'weblog/signup.html', {'form': form})
 
 
@@ -92,3 +97,5 @@ def vote(request, post_id):
         selected_comment.votes += 1
         selected_comment.save()
         return HttpResponseRedirect(reverse('weblog:results', args=(post.id,)))
+
+
