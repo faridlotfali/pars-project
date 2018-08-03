@@ -6,11 +6,14 @@
 <script src="{% static 'weblog/js/bootstrap.min.js' %}"></script>
 <script src="{% static 'weblog/js/jquery3.3.1.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<title>{% block head_title %}ParsPooyesh{% endblock head_title %}</title>
 </head>
 <body>    
 {% include "./header.html" %}    
+<div class="container">
 {% block content %}
 {% endblock %}
+</div>
 </body>
 </html>
 

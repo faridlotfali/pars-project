@@ -1,5 +1,6 @@
 {% extends 'weblog/base.html' %}
 
+{% block head_title %}SignUp || {{ block.super }}{% endblock head_title %}
 {% block content %}
   <h2>Sign up</h2>
   <form method="post">
@@ -20,4 +21,6 @@
     {% endfor %}
     <button type="submit">Sign up</button>
   </form>
+  SignUp with 
+  <a href="{% url 'weblog:signup2' %}">email</a>
 {% endblock %}
