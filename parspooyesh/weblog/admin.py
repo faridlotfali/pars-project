@@ -13,18 +13,18 @@ admin.site.index_title = "Welcome to ParsPooyesh Portal"
 
 # class QuestionAdmin(admin.ModelAdmin):
     # fields = ['pub_date', 'post_text']
-class ChoiceInline(admin.StackedInline):
-    model = Comment
-    extra = 2
+# class ChoiceInline(admin.StackedInline):
+#     model = Comment
+#     extra = 2
 
-class QuestionAdmin(admin.ModelAdmin):
-    fieldsets = [
-    ('lock',{'fields': ['post_text']}),
-    ('Date information', {'fields': ['pub_date']}),
-    ]
-    inlines = [ChoiceInline]
+# class QuestionAdmin(admin.ModelAdmin):
+#     fieldsets = [
+#     ('lock',{'fields': ['post_text']}),
+#     ('Date information', {'fields': ['pub_date']}),
+#     ]
+#     inlines = [ChoiceInline]
 
-admin.site.register(Post,QuestionAdmin)
+admin.site.register(Post)
 admin.site.register(Comment)
 admin.site.register(slider)
 admin.site.register(Profile)

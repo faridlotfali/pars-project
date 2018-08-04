@@ -19,6 +19,9 @@ from django.contrib.auth.models import User
 
 from .models import Post,Comment,slider
 
+from django.conf import settings
+from django.core.mail import send_mail
+
 def index(request):
     latest_post_list = Post.objects.order_by('-pub_date')[:5]
     slide = []
@@ -73,7 +76,11 @@ def signup2(request):
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': account_activation_token.make_token(user),
             })
-            user.email_user(subject, message)
+            # user.email_user(subject, message) 
+            try:
+                send_mail(subject,message, settings.EMAIL_HOST_USER,['farid9lotfali@gmail.com'], fail_silently=False)
+            except Exception as e: 
+                print(e)
             return redirect('weblog:account_activation_sent')
     else:
         form = SignUpForm2()
@@ -129,25 +136,24 @@ def activate(request, uidb64, token):
         
 
 class DetailView(generic.DetailView):
-    model = Post
-    template_name = 'weblog/detail.html'
+    queryset = Post.objects.all()
 
 class ResultsView(generic.DetailView):
     model = Post
     template_name = 'weblog/results.html'
 
-def vote(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
+def vote(request, slug):
+    post = get_object_or_404(Post, slug=slug)
     try:
         selected_comment = post.comment_set.get(pk=request.POST['comment'])
     except (KeyError, Comment.DoesNotExist):
-        return render(request, 'weblog/detail.html', {
+        return render(request, 'weblog/post_detail.html', {
             'post': post,
             'error_message': "You didn't select a choice.",
         })
     else:
         selected_comment.votes += 1
         selected_comment.save()
-        return HttpResponseRedirect(reverse('weblog:results', args=(post.id,)))
+        return HttpResponseRedirect(reverse('weblog:results', args=(post.slug,)))
 
 
