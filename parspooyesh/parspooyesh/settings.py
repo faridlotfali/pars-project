@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
+from .email_conf import *
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -26,12 +28,21 @@ SECRET_KEY = ')nrl)voyq-7u8)ic@5$$t!2pc%=ggypbw(q8oal4fs7!2&aaq7'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+#celery
 CELERY_BROKER_URL = 'amqp://guest:guest@localhost//'
 CELERY_RESULT_BACKEND = 'amqp://guest:guest@localhost//'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+# Email Config
+EMAIL_USE_TLS = EMAIL_USE_TLS
+EMAIL_HOST = EMAIL_HOST
+EMAIL_HOST_USER =  EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
+EMAIL_PORT = EMAIL_PORT
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 
 # Application definition
 
@@ -136,3 +147,6 @@ MEDIA_URL = '/media/'
 LOGIN_URL = 'weblog:login'
 LOGOUT_URL = 'weblog:logout'
 LOGIN_REDIRECT_URL = 'weblog:index'
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
