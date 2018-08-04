@@ -1,0 +1,30 @@
+{% extends 'weblog/base.html' %}
+
+{% block head_title %}detail || {{ block.super }}{% endblock head_title %}
+
+{% block content %} 
+<div class="results container">
+    <div class="row">
+        <div class="col-12">
+            <img src="{{ object.post_img.url }}" alt=""  style="height: 35em;">
+        </div>   
+        <div class="col-12">
+            <h1>{{object.post_title}}</h1>
+            <h3>{{object.post_text}}</h3>
+        </div>
+    </div>      
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        <div class="row col-12">
+            <form action="{% url 'weblog:vote' post.slug %}" method="post">   
+            {% csrf_token %}
+            {% for comment in post.comment_set.all %}
+                <input type="radio" name="comment" id="comment{{ forloop.counter }}" value="{{ comment.id }}" />
+                <label for="comment{{ forloop.counter }}">{{ comment.comment_text }}</label><br />
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">vote</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

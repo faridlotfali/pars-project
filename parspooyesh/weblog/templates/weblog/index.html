@@ -34,7 +34,7 @@
             <li>
                 <img src="{{ post.post_img.url }}" alt="">
                 <h3>{{ post.post_title }}</h3>
-                <a href="{%  url 'weblog:detail' post.id %}">{{ post.post_text }}</a>
+                <a href="{%  url 'weblog:detail' post.slug %}">{{ post.post_text }}</a>
             </li>
             <hr>
         {% endfor %}

@@ -1,8 +1,10 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save,pre_save
 from django.dispatch import receiver
+
+from .utils import unique_slug_generator
 
 class Post(models.Model):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
@@ -11,12 +13,26 @@ class Post(models.Model):
     post_img = models.ImageField(upload_to='weblog', blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     pub_date = models.DateTimeField('date published', blank=True, null=True)
+    timestamp = models.DateField(auto_now_add = True)
+    slug = models.SlugField(null = True,blank = True)
+
     def publish(self):
         self.published_date = timezone.now()
         self.save()
 
     def __str__(self):
         return self.post_title
+
+def p_pre_save_reciever(sender, instance ,*args, **kwargs):
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance)
+
+# def p_post_save_reciever(sender, instance ,created ,*args, **kwargs):
+#     if not instance.slug:
+#         instance.slug = unique_slug_generator(instance)
+
+pre_save.connect(p_pre_save_reciever, sender = Post)    
+# post_save.connect(p_post_save_reciever, sender = Post)    
 
 class slider(models.Model):
     image = models.ForeignKey('post', on_delete=models.CASCADE)
