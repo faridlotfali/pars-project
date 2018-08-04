@@ -16,6 +16,7 @@ class Post(models.Model):
     timestamp = models.DateField(auto_now_add = True)
     slug = models.SlugField(null = True,blank = True)
 
+
     def publish(self):
         self.published_date = timezone.now()
         self.save()

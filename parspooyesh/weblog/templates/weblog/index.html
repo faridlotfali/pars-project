@@ -46,29 +46,41 @@
     </div>
     <div class="col-md-4 col-sm-12">
     <div class="row Search-pannel">      
-      <form>
+      <form method="GET" class="index-form" >
             <div class="form-group">
-              <label for="category" class="text-dark">Category</label>
-              <select class="form-control" id="category">
+                <label for="category" class="text-dark">Category</label>
+                <select class="form-control" id="category">
                 <option>All</option>
                 <option>Posts</option>
                 <option>Comments</option>
                 <option>Most voted</option>
-              </select>
+                </select>
             </div>
             <div class="form-group">
-              <label for="designer">Author</label>
-              <input type="text" class="form-control" id="designer" placeholder="Enter Author name">
+                <label for="designer">Author</label>
+                <input type="text" name="Author" class="form-control" id="designer" value="{{ request.GET.Author }}" placeholder="Enter Author name">
             </div>
             <div class="form-group">
-              <label for="contain_word">Contains Words</label>
-              <input type="text" class="form-control" id="contain_word" placeholder="Enter contain words">
+                <label for="contain_word">Contains Words</label>
+                <input type="text" name="text" class="form-control" id="contain_word" value="{{ request.GET.text }}" placeholder="Enter contain words">
             </div>
             <hr>
             <div class="form-group">
-              <button type="submit" class="btn btn-primary">Search</button>
+                <button type="submit" class="btn btn-primary">Search</button>
             </div>
-          </form>  
+            {% if searched %}
+            <ul>
+                {% for s in searched %}
+                    <li>
+                        <img src="{{ post.post_img.url }}" alt="">
+                        <h3>{{ s.post_title }}</h3>
+                        <a href="{%  url 'weblog:detail' s.slug %}">{{ s.post_text }}</a>
+                    </li>
+                    <hr>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </form>  
     </div>
     </div>
 </div>

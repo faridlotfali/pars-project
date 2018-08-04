@@ -39,3 +39,9 @@ label{
   float: left;
   margin: 0;
 }
+.index-form a{
+  height:60px;
+  line-height:20px; /* Height / no. of lines to display */
+  overflow:hidden;
+  display: block;
+}

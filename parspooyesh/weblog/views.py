@@ -18,16 +18,33 @@ from django.utils.encoding import force_bytes,force_text
 from django.contrib.auth.models import User
 
 from .models import Post,Comment,slider
+from django.db.models import Q
 
+#email conf
 from django.conf import settings
 from django.core.mail import send_mail
 
 def index(request):
+    searched = None
+    topsearch_text = request.GET.get("text")
+    searched_text = request.GET.get("text")
+    searched_Author = request.GET.get("Author")
+    searched_Author_id = User.objects.filter( username =searched_Author) 
+    if searched_Author_id and searched_text : 
+        searched = Post.objects.filter(
+            Q(post_text__icontains=searched_text) |
+            Q(author=searched_Author_id)
+            )
+
+    if topsearch_text : 
+        topsearch = Post.objects.filter(
+            Q(post_text__icontains=topsearch_text) 
+            )           
+
     latest_post_list = Post.objects.order_by('-pub_date')[:5]
     slide = []
     for data in slider.objects.all(): 
-        # slide = Post.objects.filter(pk = data)
-        print( list(Post.objects.filter(pk = data.image_id)) ) 
+        # slide = Post.objects.filter(pk = data) 
         slide.append (list(Post.objects.filter(pk = data.image_id))[0] )
     # slide = Post.objects.filter(pk = 1)
     # output = ', '.join([p.post_text for p in latest_post_list])
@@ -36,6 +53,8 @@ def index(request):
     context = {
         'latest_post_list': latest_post_list,
         'slider' : slide,
+        'searched' : searched,
+        'topsearch' :  topsearch,
     }
     # return HttpResponse(template.render(context,request)) next code is shortcut
     return  render(request,'weblog/index.html',context)
