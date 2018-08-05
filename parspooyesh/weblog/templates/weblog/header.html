@@ -25,7 +25,7 @@
         {% endif %}
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
+        <a class="nav-link" href="#">dashboard</a>
     </li>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -40,8 +40,20 @@
     </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
-    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+    <input class="form-control mr-sm-2" type="search" name="text" placeholder="Search" aria-label="Search">
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    {% if topsearch %}
+    <ul>
+        {% for s in topsearch %}
+            <li>
+                <img src="{{ post.post_img.url }}" alt="">
+                <h3>{{ s.post_title }}</h3>
+                <a href="{%  url 'weblog:detail' s.slug %}">{{ s.post_text }}</a>
+            </li>
+            <hr>
+        {% endfor %}
+    </ul>
+    {% endif %}
     </form>
 </div>
 </div>

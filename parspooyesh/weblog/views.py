@@ -26,7 +26,6 @@ from django.core.mail import send_mail
 
 def index(request):
     searched = None
-    topsearch_text = request.GET.get("text")
     searched_text = request.GET.get("text")
     searched_Author = request.GET.get("Author")
     searched_Author_id = User.objects.filter( username =searched_Author) 
@@ -34,13 +33,7 @@ def index(request):
         searched = Post.objects.filter(
             Q(post_text__icontains=searched_text) |
             Q(author=searched_Author_id)
-            )
-
-    if topsearch_text : 
-        topsearch = Post.objects.filter(
-            Q(post_text__icontains=topsearch_text) 
-            )           
-
+            )         
     latest_post_list = Post.objects.order_by('-pub_date')[:5]
     slide = []
     for data in slider.objects.all(): 
@@ -54,7 +47,6 @@ def index(request):
         'latest_post_list': latest_post_list,
         'slider' : slide,
         'searched' : searched,
-        'topsearch' :  topsearch,
     }
     # return HttpResponse(template.render(context,request)) next code is shortcut
     return  render(request,'weblog/index.html',context)

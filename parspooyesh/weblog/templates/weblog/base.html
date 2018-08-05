@@ -1,4 +1,6 @@
 {% load static %}
+{% load footer_tags %}
+{% load header_tags %}
 <html>
 <head>    
 <link rel="stylesheet" type="text/css" href="{% static 'weblog/css/bootstrap.min.css' %}" />
@@ -9,10 +11,13 @@
 <title>{% block head_title %}ParsPooyesh{% endblock head_title %}</title>
 </head>
 <body>    
-{% include "./header.html" %}    
+{% header %}    
 <div class="container">
 {% block content %}
 {% endblock %}
+<div class="large-4 columns">
+{% footer %}
+</div>
 </div>
 </body>
 </html>
