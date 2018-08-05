@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from . import views
 from django.contrib.auth import views as auth_views
+from django.views.generic import TemplateView
 
 app_name = 'weblog'
 
@@ -16,4 +17,7 @@ urlpatterns = [
     url(r'^account_activation_sent/$', views.account_activation_sent, name='account_activation_sent'),
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         views.activate, name='activate'),
+    # url(r'^dashboard/$',  TemplateView.as_view(template_name="dashboard/index.html"), name='dashboard'),
+    url(r'^dashboard2/$',  TemplateView.as_view(template_name="dashboard2/index.html"), name='dashboard2'),
+
 ]
