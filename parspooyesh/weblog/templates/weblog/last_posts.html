@@ -1,0 +1,12 @@
+{% if posts %}
+<ul>
+    {% for s in posts %}
+        <li>
+            <img src="{{ post.post_img.url }}" alt="">
+            <h3>{{ s.post_title }}</h3>
+            <a href="{%  url 'weblog:detail' s.slug %}">{{ s.post_text }}</a>
+        </li>
+        <hr>
+    {% endfor %}
+</ul>
+{% endif %}
