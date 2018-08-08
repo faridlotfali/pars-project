@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 # Register your models here.
 from .models import Comment,slider
-from .models import Post,Profile
+from .models import Post,Profile,SiteSettings
 
 
 admin.site.site_header = "ParsPooyesh Admin"
@@ -12,22 +12,27 @@ admin.site.site_title = "ParsPooyesh Admin Portal"
 admin.site.index_title = "Welcome to ParsPooyesh Portal"
 
 # class QuestionAdmin(admin.ModelAdmin):
-    # fields = ['pub_date', 'post_text']
-# class ChoiceInline(admin.StackedInline):
-#     model = Comment
-#     extra = 2
+#     fields = ['pub_date', 'post_text']
 
-# class QuestionAdmin(admin.ModelAdmin):
-#     fieldsets = [
-#     ('lock',{'fields': ['post_text']}),
-#     ('Date information', {'fields': ['pub_date']}),
-#     ]
-#     inlines = [ChoiceInline]
+class ChoiceInline(admin.StackedInline):
+    model = Comment
+    extra = 2
+
+class QuestionAdmin(admin.ModelAdmin):
+    fieldsets = [
+    ('lock',{'fields': ['post_text']}),
+    ('Date information', {'fields': ['pub_date']}),
+    ]
+    inlines = [ChoiceInline]
+
+class Site_SettingAdmin(admin.ModelAdmin):
+    list_display = ('key_name', 'key_value')
 
 admin.site.register(Post)
 admin.site.register(Comment)
 admin.site.register(slider)
 admin.site.register(Profile)
+admin.site.register(SiteSettings,Site_SettingAdmin)
 
 class ProfileInline(admin.StackedInline):
     model = Profile

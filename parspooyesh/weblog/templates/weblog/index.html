@@ -1,33 +1,13 @@
 {% extends 'weblog/base.html' %}
+{%load static%}
 {% block content %}
-
-<div class="container"> 
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-    <ol class="carousel-indicators">
-        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-    </ol>
-    <div class="carousel-inner">
-        {%  for  data in slider|slice:":3" %}
-        <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
-            <img class="img-fluid" src="{{data.post_img.url}}">
-        </div>
-        {% endfor%}
-    </div>
-    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
-    </div>
-    <div class="row">
-        
+        <div class="row">
+            {% include "weblog/menu.html"%}
+        </div> 
+    <div class="row">  
     <div class="col-md-9 col-sm-12">
         <div class="row posts">
+                {% include "weblog/slider.html"%} 
         {% if latest_post_list %}
         <ul>
         {% for post in latest_post_list %}
@@ -45,45 +25,45 @@
         </div>
     </div>
     <div class="col-md-3 col-sm-12">
-    <div class="row Search-pannel">      
-      <form method="GET" class="index-form" >
-            <div class="form-group">
-                <label for="category" class="text-dark">Category</label>
-                <select class="form-control" id="category">
-                <option>All</option>
-                <option>Posts</option>
-                <option>Comments</option>
-                <option>Most voted</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="designer">Author</label>
-                <input type="text" name="Author" class="form-control" id="designer" value="{{ request.GET.Author }}" placeholder="Enter Author name">
-            </div>
-            <div class="form-group">
-                <label for="contain_word">Contains Words</label>
-                <input type="text" name="text" class="form-control" id="contain_word" value="{{ request.GET.text }}" placeholder="Enter contain words">
-            </div>
-            <hr>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Search</button>
-            </div>
-            {% if searched %}
-            <ul>
-                {% for s in searched %}
-                    <li>
-                        <img src="{{ post.post_img.url }}" alt="">
-                        <h3>{{ s.post_title }}</h3>
-                        <a href="{%  url 'weblog:detail' s.slug %}">{{ s.post_text }}</a>
-                    </li>
-                    <hr>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        </form>  
-    </div>
+        <div class="row Search-pannel">      
+            <form method="GET" class="index-form" >
+                <div class="form-group">
+                    <label for="category" class="text-dark">Category</label>
+                    <select class="form-control" id="category">
+                    <option>All</option>
+                    <option>Posts</option>
+                    <option>Comments</option>
+                    <option>Most voted</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="designer">Author</label>
+                    <input type="text" name="Author" class="form-control" id="designer" value="{{ request.GET.Author }}" placeholder="Enter Author name">
+                </div>
+                <div class="form-group">
+                    <label for="contain_word">Contains Words</label>
+                    <input type="text" name="text" class="form-control" id="contain_word" value="{{ request.GET.text }}" placeholder="Enter contain words">
+                </div>
+                <hr>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+                {% if searched %}
+                <ul>
+                    {% for s in searched %}
+                        <li>
+                            <img src="{{ post.post_img.url }}" alt="">
+                            <h3>{{ s.post_title }}</h3>
+                            <a href="{%  url 'weblog:detail' s.slug %}">{{ s.post_text }}</a>
+                        </li>
+                        <hr>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </form>  
+        </div>
     </div>
 </div>
-</div>
+
 {% endblock %}
 

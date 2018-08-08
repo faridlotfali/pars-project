@@ -1,3 +1,6 @@
+body{
+  background-color: F6F6F6 !important;
+}
 ul{
   list-style: none;
 }
@@ -7,9 +10,6 @@ li a {
 }
 label{
   font-weight: 600;
-}
-.container{
-  padding-top: 20px;
 }
 .posts ul{
   width: 100%; 
@@ -28,11 +28,30 @@ label{
   display: block;
 }
 .carousel-inner img{
-  height: 50%;
-  width: 100%; 
+   height: 100%;
+  width: 100% !important;
+  margin: 0 auto !important;
+}
+.carousel-inner{
+  height: 100% !important;
+  width: auto !important;
+  margin: 0 auto !important;
+} 
+.carousel-control-prev{
+  height: 100% !important;
+}
+.carousel-control-next{
+  height: 100% !important;
+}
+.carousel-control-prev-icon{
+  height: 100% !important;
+} 
+.carousel-control-next-icon{
+  height: 100% !important;
 }
 .carousel{
-  margin-bottom: 2em;
+  height: 20em;
+  margin-bottom: 1em;
 }
 #Hiusername{
   float: left;
@@ -46,8 +65,24 @@ label{
 }
 .Search-pannel{
   float: right;
+  margin: 2em 0;
 }
-
+.slide{
+  margin: 2em 0;
+}
+.navbar{
+  font-size: .9em ;
+  padding: .1em  !important;
+  background-color: E0E0E0;
+}
+.form-inline *{
+  font-size: .9em !important;
+}
+.menu{
+  direction: rtl;
+  float: right;
+  width: 100%
+}
 @media (min-width: 576px) {
   /* change this, by default 540px */
    .container {

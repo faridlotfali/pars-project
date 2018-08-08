@@ -1,4 +1,5 @@
 from django import template
+from datetime import datetime
 from ..models import Post,SiteSettings
 register = template.Library()
 
@@ -14,6 +15,6 @@ def header(context):
     return {'topsearch': topsearch , 'user':request.user }
 
 @register.filter(name='header_settings')
-def header_settings(value,args):
+def header_settings(value,args=None):
     header_title = SiteSettings.objects.all().filter(key_name='header').first().key_value
     return header_title

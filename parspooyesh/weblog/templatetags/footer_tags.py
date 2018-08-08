@@ -10,6 +10,6 @@ def footer(context):
 @register.filter(name='footer_settings')
 def footer_settings(value,args = None):
     footer = ''
-    if SiteSettings.objects.all().filter(key_name=value):
+    if SiteSettings.objects.all().filter(key_name__iexact=value):
         footer= SiteSettings.objects.all().filter(key_name=value)[0].key_value
     return footer

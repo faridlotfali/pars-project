@@ -1,12 +1,13 @@
 {% load static %}
 {% load header_tags %}
 <link rel="stylesheet" type="text/css" href="{% static 'weblog/css/bootstrap.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'weblog/css/main.css' %}" />
 <script src="{% static 'weblog/js/bootstrap.min.js' %}"></script>
 <script src="{% static 'weblog/js/jquery3.3.1.js' %}"></script>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light">
 <div class="container">
-<a class="navbar-brand" href="{% url 'weblog:index' %}">{{"title"|header_settings:'111111111111111'}}</a>
+<a class="navbar-brand" href="{% url 'weblog:index' %}">{{"title"|header_settings}}</a>
 <!-- <a class="navbar-brand" href="{% url 'weblog:index' %}">{% if header_title %} {{header_title}} {%endif%}</a> -->
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -26,6 +27,13 @@
         </div>
         {% endif %}
     </li>
+    <li class="nav-item active">
+        {% if user.is_superuser %}
+        <div class="nav-link" >
+            <a href="{% url 'admin:index' %}">admin panel</a>
+        </div>    
+        {% endif %}
+    </li>
     <li class="nav-item">
         <a class="nav-link" href="{% url 'dashboard:index' %}">dashboard</a>
     </li>
@@ -41,6 +49,9 @@
         </div>
     </li>
     </ul>
+    <div style="margin-right: 1em;">
+    {% now " H:i:s" %}
+    </div>
     <form class="form-inline my-2 my-lg-0">
     <input class="form-control mr-sm-2" type="search" name="text" placeholder="Search" aria-label="Search">
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -60,3 +71,13 @@
 </div>
 </div>
 </nav>
+
+<div class="container">
+    <div class="row">
+        <div style="float: right;">
+            <h1>ParsPooyesh</h1>
+        </div>
+    </div>
+</div>
+
+<!-- menu -->
