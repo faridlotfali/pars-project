@@ -67,5 +67,26 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
         Profile.objects.create(user=instance)
     instance.profile.save()
 
+# class SiteSetting(models.Model):
+#     setting_name =  models.CharField(max_length=50, blank=False)
+#     apply = models.BooleanField(default = False)
 
+#     def save(self, *args, **kwargs):
+#         if self.apply:
+#             print(super(SiteSetting, self).objects.all)    
+#         super(SiteSetting, self).save(*args, **kwargs)
 
+# class links(models.Model):
+#     site = models.ForeignKey(SiteSetting , on_delete = models.CASCADE )
+#     link_name =  models.CharField(max_length=100, blank=False)
+#     link =  models.TextField(max_length=500, blank=False)
+
+#     def __str__(self):
+#         return self.link_name 
+
+class SiteSettings(models.Model):
+    key_name = models.CharField(max_length=50)    
+    key_value = models.TextField(max_length=500)    
+
+    def __str__(self):
+        return self.key_name

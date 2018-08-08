@@ -16,3 +16,9 @@ class SignUpForm2(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2', )        
+
+class site_settings(forms.Form):
+    key_name = forms.CharField(max_length=50)
+    key_value= forms.CharField(max_length=500)
+
+    
