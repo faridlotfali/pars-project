@@ -22,7 +22,9 @@
         {% endif %}
       </p>
     {% endfor %}
-    <button type="submit">Log in</button>
-    <a href="{% url 'weblog:signup' %}">New to My Site? Sign up</a>
+    <button class="btn" type="submit">Log in</button>
+    <button class="btn ">
+      <a href="{% url 'weblog:signup' %}"> Sign up</a>
+  </button>
   </form>
 {% endblock %}
