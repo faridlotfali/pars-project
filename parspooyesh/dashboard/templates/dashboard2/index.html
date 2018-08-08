@@ -1,5 +1,6 @@
 {% load static%}
 {% load last_posts_tags %}
+{% load header_tags %}
 <!DOCTYPE html>
 <html >
 <head>
@@ -15,8 +16,9 @@
 </head>
 
 <body>
+{% header %}  
 <!-- / Begin Body -->
-
+<div class="container">
   <!-- /////////// Begin Dropdown //////////// -->
   <div class='swanky_wrapper'>
     <input id='Dashboard' name='radio' type='radio'>
@@ -27,10 +29,8 @@
       <div class='bar'></div>
       <div class='swanky_wrapper__content'>
         <ul>
-          <li>Tools</li>
+          <li>Edit</li>
           <li>Reports</li>
-          <li>Analytics</li>
-          <li>Code Blocks</li>
         </ul>
       </div>
     </label>
@@ -44,8 +44,6 @@
         <ul>
           <li>New Sales</li>
           <li>Expired Sales</li>
-          <li>Sales Reports</li>
-          <li>Deliveries</li>
         </ul>
       </div>
     </label>
@@ -59,8 +57,6 @@
         <ul>
           <li>Inbox</li>
           <li>Outbox</li>
-          <li>Sent</li>
-          <li>Archived</li>
         </ul>
       </div>
     </label>
@@ -73,7 +69,7 @@
       <div class='swanky_wrapper__content'>
         <ul>
           <li>New User</li>
-          <li>User Groups</li>
+          <!-- <li>User Groups</li> -->
           <li>Permissions</li>
           <li>Passwords</li>
         </ul>
@@ -88,21 +84,35 @@
         <ul>
           <li>Databases</li>
           <li>Design</li>
-          <li>Change User</li>
           <li>Log Out</li>
         </ul>
       </div>
     </label>
   </div>
   <!-- /////////// End Dropdown //////////// -->
-</div>
-<div class="container">
-  <div class="row">
-    <h1>Last Posts</h1>
-    <div class="col-12">
-{% last_5post %}
-</div>
-</div>
+  <div class="row posts">
+    <div class="col-md-5 last_posts">
+        <h1>Last Posts</h1>
+  {% last_post %}
+    </div>
+
+    <div class="col-md-5 last_posts">
+        <h1>My Posts</h1>
+        {% if user_post_list %}
+        <ul>
+            {% for s in user_post_list %}
+                <li>
+                    <img src="{{ s.post_img.url }}" alt="">
+                    <h5>{{ s.post_title }}</h5>
+                    <a href="{%  url 'weblog:detail' s.slug %}">{{ s.post_text |truncatechars:20 }}</a>
+                </li>
+                <hr>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+
+  </div>
 </div>
 <!-- / My Footer -->
 

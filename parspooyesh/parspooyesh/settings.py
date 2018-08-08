@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'weblog.apps.WeblogConfig',
+    'dashboard.apps.DashboardConfig',
     'django_celery_beat',
     'django_celery_results'
 ]

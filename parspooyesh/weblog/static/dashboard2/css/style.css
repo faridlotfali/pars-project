@@ -50,6 +50,7 @@ body .swanky_title {
   position: relative;
   top: 70px;
 }
+
 body .swanky_title__social a {
   position: relative;
   overflow: hidden;
@@ -173,14 +174,18 @@ body .swanky_wrapper label {
   transition: text-indent .15s, height .3s;
   box-sizing: border-box;
 }
+body .swanky_wrapper label * {
+  float: right;
+}
 body .swanky_wrapper label img {
-  margin-right: 10px;
+  margin: 0 10px;
   position: relative;
   top: 2px;
   width: 16px;
 }
 body .swanky_wrapper label span {
   position: relative;
+  margin: 0 5px;
   top: -3px;
 }
 body .swanky_wrapper label:hover {
@@ -205,6 +210,7 @@ body .swanky_wrapper label .bar {
 body .swanky_wrapper label .lil_arrow {
   width: 5px;
   height: 5px;
+  margin-right: 2em;
   -webkit-transition: transform 0.8s;
   -webkit-transition: -webkit-transform 0.8s;
   transition: -webkit-transform 0.8s;
@@ -227,12 +233,17 @@ body .swanky_wrapper__content {
   left: 0;
   width: 100%;
 }
+body .swanky_wrapper__content ul {
+  width: 100%;
+}
 body .swanky_wrapper__content li {
   width: 100%;
   opacity: 0;
-  left: -100%;
+  right: -100%;
+  text-align: right;
   background: #15a4fa;
-  padding: 25px 0px;
+  padding: 25px 0;
+  padding-right: 2em;
   text-indent: 25px;
   box-shadow: 0px 0px #126CA1  inset;
   -webkit-transition: box-shadow .3s,text-indent .3s;
@@ -333,35 +344,9 @@ input[type='radio']:checked + label li:nth-of-type(4) {
     opacity: 1;
   }
 }
-.love {
-  position: absolute;
-  right: 20px;
-  bottom: 0px;
-  font-size: 11px;
-  font-weight: normal;
-}
-.love p {
-  color: white;
-  font-weight: normal;
-  font-family: 'Open Sans', sans-serif;
-}
-.love a {
-  color: white;
-  font-weight: 700;
-  text-decoration: none;
-}
-.love img {
-  position: relative;
-  top: 3px;
-  margin: 0px 4px;
-  width: 10px;
-}
-
-.brand {
-  position: absolute;
-  left: 20px;
-  bottom: 14px;
-}
-.brand img {
-  width: 30px;
+.last_posts{
+  border: 2px solid #2A394F;
+  margin: 2em;
+  border-radius: 1em;
+  padding: 2em;
 }
