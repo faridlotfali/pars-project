@@ -1,9 +1,4 @@
-<p>Dummy text.</p>
-<ul>
-    {% for entry in posts %}
-        <li>{{ entry.post_title }}</li>
-    {% endfor %}
-</ul>
+{%load footer_tags%}
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 <!-- Footer -->
 <footer class="page-footer font-small stylish-color-dark pt-4">
@@ -12,11 +7,10 @@
       <!-- Grid row -->
       <div class="row">
         <!-- Grid column -->
-        <div class="col-md-6 mx-auto">
+        <div class="col-md-6 ">
           <!-- Content -->
           <h5 class="font-weight-bold text-uppercase mt-3 mb-4">Footer Content</h5>
-          <p>Here you can use rows and columns here to organize your footer content. Lorem ipsum dolor sit amet, consectetur
-            adipisicing elit.</p>
+          <p>{{ "footercontent"|footer_settings }}</p>
         </div>
 
         <!-- Grid column -->
@@ -27,18 +21,15 @@
           <!-- Links -->
           <h5 class="font-weight-bold text-uppercase mt-3 mb-4">Links</h5>
           <ul class="list-unstyled">
-            <li>
-              <a href="#!">Link 1</a>
-            </li>
-            <li>
-              <a href="#!">Link 2</a>
-            </li>
-            <li>
-              <a href="#!">Link 3</a>
-            </li>
-            <li>
-              <a href="#!">Link 4</a>
-            </li>
+                  <li>
+                      <a href="{{ "footerLink1"|footer_settings }}">{{"footerName1"|footer_settings}}</a>
+                  </li>
+                  <li>
+                      <a href="{{ "footerLink2"|footer_settings }}" >{{"footerName2"|footer_settings}}</a>
+                  </li>
+                  <li>
+                      <a href="{{ "footerLink3"|footer_settings }}">{{"footerName3"|footer_settings}}</a>
+                  </li>
           </ul>
         </div>
         <!-- Grid column -->

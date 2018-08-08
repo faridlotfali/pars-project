@@ -2,8 +2,8 @@
 <ul>
     {% for s in posts %}
         <li>
-            <img src="{{ post.post_img.url }}" alt="">
-            <h3>{{ s.post_title }}</h3>
+            <img src="{{ s.post_img.url }}" alt="">
+            <h5>{{ s.post_title }}</h5>
             <a href="{%  url 'weblog:detail' s.slug %}">{{ s.post_text }}</a>
         </li>
         <hr>
