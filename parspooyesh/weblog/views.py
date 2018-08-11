@@ -1,10 +1,10 @@
-from django.shortcuts import render,get_object_or_404,redirect
+from django.shortcuts import render,get_object_or_404,redirect,render_to_response
 from django.http import HttpResponse,Http404,HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
 from django.views import generic
 
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate,logout
 from django.contrib.auth.forms import UserCreationForm
 from  weblog.forms import SignUpForm,SignUpForm2
 # from django.contrib.auth.decorators import login_required
@@ -96,6 +96,23 @@ def signup2(request):
     else:
         form = SignUpForm2()
     return render(request, 'weblog/signup.html', {'form': form})
+
+# def loginn(request):
+    # return render(request, 'weblog/login.html')
+
+def loginn(request):
+    logout(request)
+    username = password = ''
+    if request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                print("success")
+                # return redirect('weblog:index')
+    return render(request ,'weblog/login.html')
 
 
 def activate(request, uidb64, token):

@@ -28,7 +28,7 @@ def p_pre_save_reciever(sender, instance ,*args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
 
-# def p_post_save_reciever(sender, instance ,created ,*args, **kwargs):
+# def p_post_save_reciever(sender,Post0- instance ,created ,*args, **kwargs):
 #     if not instance.slug:
 #         instance.slug = unique_slug_generator(instance)
 

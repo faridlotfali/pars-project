@@ -16,17 +16,81 @@
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
     <li class="nav-item active">
-        {% if user.is_authenticated %}
         <div class="nav-link" >
-            <p id="Hiusername">hi {{user}} </p>
+            <p id="Hiusername">{{user}} </p>
+            {% if user.is_authenticated %}
             <a href="{% url 'weblog:logout' %}">/logout</a>
+            </div>
+            {% else %}
         </div>    
-        {% else %}
         <div class="nav-link" >
-            <a href="{% url 'weblog:login' %}">login</a>/<a href="{% url 'weblog:signup' %}">signup</a>
+            <a href="javascript:void(0);" class="text-btn" data-toggle="modal" data-target="#login">login</a>
+            /<a href="{% url 'weblog:signup' %}">signup</a>
         </div>
-        {% endif %}
+            {% endif%}
     </li>
+    
+
+<div id="login" class="modal fade" id="modal" role="dialog">
+    <div class="modal-dialog">
+    <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+                </div>
+                <div class="modal-body">
+                <p>Some text in the modal.</p>
+                <div class="panel-body">
+                    <form class="form-horizontal" id="login_form" name="LoginForm" action="/login/" method="post">
+                    {% csrf_token %}
+                    {% if next %}
+                        <input type="hidden" name="next" value="{{ next }}" />
+                    {% endif %}
+                    <div class="control-group">
+                        <label class="control-label" for="username">Username</label>
+                        <div class="controls">
+                            <input type="text" id="username" name="username"  placeholder="Username">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="password">Password</label>
+                        <div class="controls">
+                            <input type="password" name="password" id="password" placeholder="Password">
+                        </div>
+                    </div>
+                    <div class="control-group mt-2">
+                        <div class="controls">
+                            <button type="submit" id="login-btn" class="btn btn-primary">Login</button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <li class="nav-item active">
         {% if user.is_superuser %}
         <div class="nav-link" >
@@ -34,9 +98,11 @@
         </div>    
         {% endif %}
     </li>
+    {% if user.is_authenticated %}
     <li class="nav-item">
         <a class="nav-link" href="{% url 'dashboard:index' %}">dashboard</a>
     </li>
+    {% endif %}
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Dropdown
@@ -79,5 +145,27 @@
         </div>
     </div>
 </div>
-
+<script>
+        $(document).on('submit','#login_form', function(e){
+          e.preventDefault();
+          var user = $('#username').val();
+          $.ajax({
+            type:'POST',
+            url : '/login/',
+            data:{
+              username:$('#username').val(),
+              password:$('#password').val(),
+              csrfmiddlewaretoken: $('input[name = csrfmiddlewaretoken ]').val(),
+            },
+            success: function(){
+                $('#Hiusername').text(`hi ${user}`);
+                setTimeout(function(){
+                    $('#modal').modal('toggle');
+                },2000);
+            }
+          });
+  
+        });
+      </script>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
 <!-- menu -->
