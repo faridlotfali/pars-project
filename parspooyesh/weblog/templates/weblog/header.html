@@ -36,7 +36,7 @@
                 <div class="modal-body">
                 <p>Some text in the modal.</p>
                 <div class="panel-body">
-                    <form class="form-horizontal" id="login_form" name="LoginForm" action="/login/" method="post">
+                    <form class="form-horizontal" id="login_form" name="LoginForm" action="/login2/" method="post">
                     {% csrf_token %}
                     {% if next %}
                         <input type="hidden" name="next" value="{{ next }}" />
@@ -127,7 +127,7 @@
           var user = $('#username').val();
           $.ajax({
             type:'POST',
-            url : '/login/',
+            url : '/login2/',
             data:{
               username:$('#username').val(),
               password:$('#password').val(),

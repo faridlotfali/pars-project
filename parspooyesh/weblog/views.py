@@ -4,10 +4,11 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView,DetailView,CreateView,UpdateView
 
+
 from django.contrib.auth import login, authenticate,logout
 from django.contrib.auth.forms import UserCreationForm
 from  weblog.forms import SignUpForm,SignUpForm2,PostForm,CommentForm
-# from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -15,6 +16,9 @@ from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from .tokens import account_activation_token
 from django.utils.encoding import force_bytes,force_text
 # from mysite.core.tokens import account_activation_token
+
+#paginate
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django.contrib.auth.models import User
 from .models import Post,Comment,slider
@@ -113,8 +117,7 @@ class SignUp3(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def loginn(request):
-    logout(request)
+def loginn2(request):
     username = password = ''
     if request.POST:
         username = request.POST['username']
@@ -126,8 +129,19 @@ def loginn(request):
                 # return redirect('weblog:index')
         else: 
             return JsonResponse({"success": false ,"error": "username or password not exists"})        
-    return render(request ,'weblog/login.html')
+    return redirect('weblog:login')
 
+def loginn(request):
+    username = password = ''
+    if request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return redirect('weblog:index')         
+    return render(request ,'weblog/login.html')
 
 def activate(request, uidb64, token):
     try:
@@ -165,9 +179,11 @@ class ResultsView(DetailView):
     template_name = 'weblog/results.html'
 
 class PostListView(ListView):
+    model = Post
     template_name = 'weblog/index.html'
-    def get_queryset(self):
-        return Post.objects.filter()
+    context_object_name = 'posts'  # Default: object_list
+    paginate_by = 6 
+    queryset = Post.objects.all()
 
     def get_context_data(self,*args,**kwargs): 
         context = dict()  
@@ -199,7 +215,13 @@ class PostCreateView(CreateView):
     def get_context_data(self,*args,**kwargs): 
         context = super(PostCreateView, self).get_context_data(*args, **kwargs)       
         context['title'] = 'Create Item'
-        return context         
+        return context
+
+    def form_valid(self, form):
+        model = form.save(commit=False)
+        model.author = self.request.user
+        return super(PostCreateView, self).form_valid(form)
+       
 
 
 class PostUpdateView(UpdateView):
@@ -217,13 +239,15 @@ class CommentCreateView(CreateView):
     template_name = 'weblog/form.html'
     form_class = CommentForm
     
-    def get_queryset(self):
-        return Comment.objects.all()
-    
     def get_context_data(self,*args,**kwargs): 
         context = super(CommentCreateView, self).get_context_data(*args, **kwargs)       
         context['title'] = 'Create Comment'
         return context  
+
+    def form_valid(self, form):
+        model = form.save(commit=False)
+        model.comment = Post.objects.filter(slug =self.kwargs['slug'])[0]
+        return super(CommentCreateView, self).form_valid(form)
 
 class Search(ListView):
     template_name = 'weblog/searched_result.html'
