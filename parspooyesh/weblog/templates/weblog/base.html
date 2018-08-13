@@ -14,14 +14,14 @@
 <title>{% block head_title %}ParsPooyesh{% endblock head_title %}</title>
 </head>
 <body>    
-{% header %}
+    {% include 'weblog/header.html' %}
 <div class="container">
     {% block content %}
     {% endblock %}
 </div>
 <div class="container">
     <div class="large-4 columns">
-    {% footer %}
+    {% include 'weblog/footer.html' %}
     </div>
 </div>
 </body>

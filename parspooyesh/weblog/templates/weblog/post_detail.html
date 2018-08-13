@@ -6,7 +6,9 @@
 <div class="results container">
     <div class="row">
         <div class="col-12">
+            {% if object.post_img%}  
             <img src="{{ object.post_img.url }}" alt=""  style="height: 35em;">
+            {% endif %}
         </div>   
         <div class="col-12">
             <h1>{{object.post_title}}</h1>

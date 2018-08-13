@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
+from .models import Post,Comment
 
 class SignUpForm(UserCreationForm):
     birth_date = forms.DateField(help_text='Required. Format: YYYY-MM-DD')
@@ -21,4 +22,20 @@ class site_settings(forms.Form):
     key_name = forms.CharField(max_length=50)
     key_value= forms.CharField(max_length=500)
 
-    
+class PostForm(forms.ModelForm):
+    class Meta:
+        model  = Post
+        fields =[
+            'author',
+            'post_title',
+            'post_text',
+            'post_img'
+        ]
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model  = Comment
+        fields =[
+            'comment',
+            'comment_text',
+        ]       

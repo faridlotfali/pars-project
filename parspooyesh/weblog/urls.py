@@ -6,12 +6,20 @@ from django.views.generic import TemplateView
 app_name = 'weblog'
 
 urlpatterns = [
-    url(r'^$',views.index, name='index'),
-    url(r'^posts/(?P<slug>[\w-]+)/$',views.DetailView.as_view(), name='detail'),
+    url(r'^$',views.PostListView.as_view(), name='index'),
+    url(r'^posts/create/$',views.PostCreateView.as_view(), name='create'),
+    url(r'^posts/update/$',views.PostUpdateView.as_view(), name='update'),
+    
+    url(r'^posts/(?P<slug>[\w-]+)/$',views.PostDetailView.as_view(), name='detail'),
+    url(r'^posts/(?P<slug>[\w-]+)/comment/$',views.CommentCreateView.as_view(), name='comment'),
+
     url(r'^posts/(?P<slug>[\w-]+)/results/$', views.ResultsView.as_view(), name='results'),
     url(r'^posts/(?P<slug>[\w-]+)/vote/$', views.vote, name='vote'),
     url(r'^signup/$', views.signup, name='signup'),
     url(r'^signup2/$', views.signup2, name='signup2'),
+    url(r'^signup3/$', views.SignUp3.as_view(), name='signup3'),
+
+    url(r'^searched/$', views.Search.as_view(), name='search'),
     # url(r'^login/$', auth_views.login, {'template_name': 'weblog/login.html'}, name='login'),
     url(r'^login/$', views.loginn, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': 'weblog:index'}, name='logout'),

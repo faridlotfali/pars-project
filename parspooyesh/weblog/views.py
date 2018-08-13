@@ -1,12 +1,12 @@
 from django.shortcuts import render,get_object_or_404,redirect,render_to_response
-from django.http import HttpResponse,Http404,HttpResponseRedirect
-from django.template import loader
+from django.http import HttpResponse,Http404,HttpResponseRedirect,JsonResponse
 from django.urls import reverse
-from django.views import generic
+from django.views import View
+from django.views.generic import ListView,DetailView,CreateView,UpdateView
 
 from django.contrib.auth import login, authenticate,logout
 from django.contrib.auth.forms import UserCreationForm
-from  weblog.forms import SignUpForm,SignUpForm2
+from  weblog.forms import SignUpForm,SignUpForm2,PostForm,CommentForm
 # from django.contrib.auth.decorators import login_required
 
 from django.contrib.sites.shortcuts import get_current_site
@@ -15,8 +15,8 @@ from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from .tokens import account_activation_token
 from django.utils.encoding import force_bytes,force_text
 # from mysite.core.tokens import account_activation_token
-from django.contrib.auth.models import User
 
+from django.contrib.auth.models import User
 from .models import Post,Comment,slider
 from django.db.models import Q
 
@@ -24,32 +24,15 @@ from django.db.models import Q
 from django.conf import settings
 from django.core.mail import send_mail
 
-def index(request):
-    searched = None
-    searched_text = request.GET.get("text")
-    searched_Author = request.GET.get("Author")
-    searched_Author_id = User.objects.filter( username =searched_Author) 
-    if searched_Author_id and searched_text : 
-        searched = Post.objects.filter(
-            Q(post_text__icontains=searched_text) |
-            Q(author=searched_Author_id)
-            )         
-    latest_post_list = Post.objects.order_by('-pub_date')[:5]
-    slide = []
-    for data in slider.objects.all(): 
-        # slide = Post.objects.filter(pk = data) 
-        slide.append (list(Post.objects.filter(pk = data.image_id))[0] )
-    # slide = Post.objects.filter(pk = 1)
-    # output = ', '.join([p.post_text for p in latest_post_list])
-    # return HttpResponse(output)
-    # template = loader.get_template('weblog/index.html') next code is shortcut
-    context = {
-        'latest_post_list': latest_post_list,
-        'slider' : slide,
-        'searched' : searched,
-    }
-    # return HttpResponse(template.render(context,request)) next code is shortcut
-    return  render(request,'weblog/index.html',context)
+#rest 
+from . import serializers
+from rest_framework.views import APIView
+from rest_framework.authtoken.models import Token
+from rest_framework import status
+from django.http import JsonResponse
+from rest_framework.response import Response
+
+from django.core.files.storage import FileSystemStorage
 
 def signup(request):
     if request.method == 'POST':
@@ -97,8 +80,38 @@ def signup2(request):
         form = SignUpForm2()
     return render(request, 'weblog/signup.html', {'form': form})
 
-# def loginn(request):
-    # return render(request, 'weblog/login.html')
+
+class SignUp3(APIView):
+    throttle_classes = ()
+    permission_classes = ()
+    """
+    Creates the user.
+    """
+    def get(self, request):
+        #do something with 'GET' method
+        # return Response("some data")
+        serializer = serializers.MyUserSerializer(data=request.data)
+        print(request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            if user:
+                token = Token.objects.create(user=user)
+                json = serializer.data
+                json['token'] = token.key
+                return Response(json, status=status.HTTP_201_CREATED)
+
+    def post(self, request, format='json'):
+        serializer = serializers.MyUserSerializer(data=request.data)
+        print(request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            if user:
+                token = Token.objects.create(user=user)
+                json = serializer.data
+                json['token'] = token.key
+                return Response(json, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def loginn(request):
     logout(request)
@@ -110,8 +123,9 @@ def loginn(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                print("success")
                 # return redirect('weblog:index')
+        else: 
+            return JsonResponse({"success": false ,"error": "username or password not exists"})        
     return render(request ,'weblog/login.html')
 
 
@@ -132,44 +146,6 @@ def activate(request, uidb64, token):
         return render(request, 'weblog/account_activation_invalid.html')
 
 
-
-
-# def detail(request,post_id):
-#     # try:
-#     #    post = Post.objects.get(pk=post_id)
-#     # except Post.DoesNotExist:
-#         # raise Http404("post does not exist") #next line is shortcut
-#     post = get_object_or_404(Post, pk=post_id) 
-#     return render(request, 'weblog/detail.html', {'post':post})
-
-
-# def results(request, post_id):
-#     post = get_object_or_404(Post, pk=post_id)
-#     return render(request, 'weblog/results.html', {'post': post})
-
-
-# class IndexView(generic.ListView):
-#     template_name = 'weblog/index.html'
-#     context_object_name = 'latest_post_list'
-
-#     def get_queryset(self):
-#         """Return the last five published posts."""
-#         context=dict()
-#         context['latest_post_list']=Post.objects.order_by('-pub_date')[:5]
-#         context['slider']=slider.objects.all()
-#         # context['slider']=post.slider_set.get(pk=request.POST['comment'])
-#         print(context)
-#         return context['latest_post_list'] 
-
-        
-
-class DetailView(generic.DetailView):
-    queryset = Post.objects.all()
-
-class ResultsView(generic.DetailView):
-    model = Post
-    template_name = 'weblog/results.html'
-
 def vote(request, slug):
     post = get_object_or_404(Post, slug=slug)
     try:
@@ -184,4 +160,85 @@ def vote(request, slug):
         selected_comment.save()
         return HttpResponseRedirect(reverse('weblog:results', args=(post.slug,)))
 
+class ResultsView(DetailView):
+    model = Post
+    template_name = 'weblog/results.html'
 
+class PostListView(ListView):
+    template_name = 'weblog/index.html'
+    def get_queryset(self):
+        return Post.objects.filter()
+
+    def get_context_data(self,*args,**kwargs): 
+        context = dict()  
+        mostseen = Post.objects.all().order_by('-seen')[:3]
+        print(mostseen)
+        slide = []
+        for data in slider.objects.all(): 
+            slide.append (list(Post.objects.filter(pk = data.image_id))[0] )
+        context = super(PostListView, self).get_context_data(*args, **kwargs)
+        context['slider']=slide
+        context['mostseen']=mostseen
+        return context      
+
+class PostDetailView(DetailView):
+    def get_queryset(self):
+        post = Post.objects.filter(slug =self.kwargs['slug'])[0]
+        post.seen += 1
+        post.save()
+        print(post.seen)
+        return Post.objects.filter(slug =self.kwargs['slug'])
+
+class PostCreateView(CreateView):
+    template_name = 'weblog/form.html'
+    form_class = PostForm
+    
+    def get_queryset(self):
+        return Post.objects.filter(author = self.request.user)
+    
+    def get_context_data(self,*args,**kwargs): 
+        context = super(PostCreateView, self).get_context_data(*args, **kwargs)       
+        context['title'] = 'Create Item'
+        return context         
+
+
+class PostUpdateView(UpdateView):
+    template_name = 'weblog/form.html'
+    form_class = PostForm
+    def get_queryset(self):
+        return Post.objects.filter(author = self.request.user)
+
+    def get_context_data(self,*args,**kwargs): 
+        context = super(PostUpdateView, self).get_context_data(*args, **kwargs)       
+        context['title'] = 'Update Item'
+        return context     
+
+class CommentCreateView(CreateView):
+    template_name = 'weblog/form.html'
+    form_class = CommentForm
+    
+    def get_queryset(self):
+        return Comment.objects.all()
+    
+    def get_context_data(self,*args,**kwargs): 
+        context = super(CommentCreateView, self).get_context_data(*args, **kwargs)       
+        context['title'] = 'Create Comment'
+        return context  
+
+class Search(ListView):
+    template_name = 'weblog/searched_result.html'
+ 
+    def get_queryset(self):
+        searched_text = self.request.GET.get("text")
+        result = None
+        searched_Author_id = User.objects.filter( username = self.request.GET.get("Author")) 
+        if searched_Author_id:
+            result = Post.objects.filter(
+                Q(post_text__icontains=searched_text) &
+                Q(author=searched_Author_id)
+            )
+        else :    
+            result = Post.objects.filter(
+                Q(post_text__icontains=searched_text)
+            )
+        return result    

@@ -1,3 +1,4 @@
+from django.shortcuts import render,redirect
 from django import template
 from datetime import datetime
 from ..models import Post,SiteSettings
@@ -6,13 +7,8 @@ register = template.Library()
 
 @register.inclusion_tag('weblog/header.html' , takes_context=True)
 def header(context):
-    # header_title = SiteSetting.objects.all().first().header_title
-    topsearch = None
     request = context["request"]
-    topsearch_text = request.GET.get('text')
-    if topsearch_text : 
-        topsearch = Post.objects.filter(post_text__icontains=topsearch_text) 
-    return {'topsearch': topsearch , 'user':request.user }
+    return {'user': request.user }
 
 @register.filter(name='header_settings')
 def header_settings(value,args=None):

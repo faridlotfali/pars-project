@@ -29,8 +29,16 @@
       <div class='bar'></div>
       <div class='swanky_wrapper__content'>
         <ul>
-          <li>Edit</li>
-          <li>Reports</li>
+          <li>
+            <a href="{% url 'weblog:create' %}">
+              Create Post
+            </a>
+          </li>
+          <li>
+              <a href="{% url 'weblog:create' %}">
+                  Update Post
+              </a>
+          </li>
         </ul>
       </div>
     </label>
@@ -102,7 +110,9 @@
         <ul>
             {% for s in user_post_list %}
                 <li>
+                  {% if s.post_img%}
                     <img src="{{ s.post_img.url }}" alt="">
+                    {% endif%}
                     <h5>{{ s.post_title }}</h5>
                     <a href="{%  url 'weblog:detail' s.slug %}">{{ s.post_text |truncatechars:20 }}</a>
                 </li>

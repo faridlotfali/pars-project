@@ -8,13 +8,17 @@
     <div class="col-md-9 col-sm-12">
         <div class="row posts">
                 {% include "weblog/slider.html"%} 
-        {% if latest_post_list %}
+        {% if object_list %}
         <ul>
-        {% for post in latest_post_list %}
+        {% for obj in object_list %}
             <li>
-                <img src="{{ post.post_img.url }}" alt="">
-                <h3>{{ post.post_title }}</h3>
-                <a href="{%  url 'weblog:detail' post.slug %}">{{ post.post_text }}</a>
+                {% if obj.post_img%}
+                <img src="{{ obj.post_img.url }}" alt="">
+                {%endif%}
+                <h3>{{ obj.post_title|truncatechars:20}}</h3>
+                <p>{{ obj.created_date }}</p>
+                <a class="comment-btn btn btn-info" href="{% url 'weblog:comment' obj.slug %}">Comment</a>
+                <a href="{%  url 'weblog:detail' obj.slug %}">{{ obj.post_text|truncatechars:20 }}</a>
             </li>
             <hr>
         {% endfor %}
@@ -26,7 +30,7 @@
     </div>
     <div class="col-md-3 col-sm-12">
         <div class="row Search-pannel">      
-            <form method="GET" class="index-form" >
+            <form method="GET" action="{% url 'weblog:search' %}" class="index-form" >
                 <div class="form-group">
                     <label for="category" class="text-dark">Category</label>
                     <select class="form-control" id="category">
@@ -48,20 +52,26 @@
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Search</button>
                 </div>
-                {% if searched %}
-                <ul>
-                    {% for s in searched %}
-                        <li>
-                            <img src="{{ post.post_img.url }}" alt="">
-                            <h3>{{ s.post_title }}</h3>
-                            <a href="{%  url 'weblog:detail' s.slug %}">{{ s.post_text }}</a>
-                        </li>
-                        <hr>
-                    {% endfor %}
-                </ul>
-                {% endif %}
             </form>  
         </div>
+
+        <div class="row Search-pannel">
+            {% if mostseen %}
+            <ul>
+                <h2>Most Seen</h2>
+            {% for obj in mostseen %}
+                <li>
+                    <h5>{{ obj.post_title|truncatechars:20}}</h5>
+                    <a href="{%  url 'weblog:detail' obj.slug %}">{{ obj.post_text|truncatechars:20 }}</a>
+                </li>
+                <hr>
+            {% endfor %}
+            </ul>
+            {% else %}
+            <p>No post are available.</p>
+            {% endif %}
+        </div>
+    </div>
     </div>
 </div>
 

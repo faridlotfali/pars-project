@@ -3,19 +3,21 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save,pre_save
 from django.dispatch import receiver
+from django.core.urlresolvers import reverse
 
 from .utils import unique_slug_generator
+
 
 class Post(models.Model):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     post_title = models.CharField(max_length=300)
     post_text = models.TextField(max_length=3000)
-    post_img = models.ImageField(upload_to='weblog', blank=True)
+    post_img = models.FileField(upload_to='weblog', blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     pub_date = models.DateTimeField('date published', blank=True, null=True)
     timestamp = models.DateField(auto_now_add = True)
     slug = models.SlugField(null = True,blank = True)
-
+    seen = models.BigIntegerField(default = 0)
 
     def publish(self):
         self.published_date = timezone.now()
@@ -23,6 +25,9 @@ class Post(models.Model):
 
     def __str__(self):
         return self.post_title
+
+    def get_absolute_url(self):
+        return reverse('weblog:detail',kwargs = {'slug' : self.slug})    
 
 def p_pre_save_reciever(sender, instance ,*args, **kwargs):
     if not instance.slug:
@@ -48,6 +53,8 @@ class Comment(models.Model):
     def __str__(self):
         return self.comment_text
 
+    def get_absolute_url(self):
+        return reverse('weblog:detail',kwargs = {'slug' : self.comment.slug})    
 
 
 class Profile(models.Model):

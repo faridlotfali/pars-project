@@ -21,12 +21,6 @@ label{
   float: left;
   padding: .5em 1em;
 }
-.posts a{
-  height:60px;
-  line-height:20px; /* Height / no. of lines to display */
-  overflow:hidden;
-  display: block;
-}
 .carousel-inner img{
    height: 100%;
   width: 100% !important;
@@ -101,4 +95,12 @@ label{
   .container {
     max-width: 1190px !important;
   }
+}
+
+.col-centered{
+  float: none;
+  margin: 0 auto;
+}
+.comment-btn{
+  float: right;
 }

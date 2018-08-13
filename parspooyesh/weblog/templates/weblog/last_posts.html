@@ -2,7 +2,9 @@
 <ul>
     {% for s in posts %}
         <li>
+            {% if s.post_img %}
             <img src="{{ s.post_img.url }}" alt="">
+            {% endif %}
             <h5>{{ s.post_title }}</h5>
             <a href="{%  url 'weblog:detail' s.slug %}">{{ s.post_text }}</a>
         </li>
