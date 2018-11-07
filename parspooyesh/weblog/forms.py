@@ -30,6 +30,10 @@ class PostForm(forms.ModelForm):
             'post_text',
             'post_img'
         ]
+    def __init__(self,user, *args, **kwargs):
+        print(user)
+        super(PostForm,self).__init__(*args,**kwargs)
+        # self.fields['author'].queryset = Post.objects.filter(author=user)
 
 class CommentForm(forms.ModelForm):
     class Meta:

@@ -27,7 +27,7 @@ SECRET_KEY = ')nrl)voyq-7u8)ic@5$$t!2pc%=ggypbw(q8oal4fs7!2&aaq7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['982857f4.ngrok.io','localhost']
 #celery
 CELERY_BROKER_URL = 'amqp://guest:guest@localhost//'
 CELERY_RESULT_BACKEND = 'amqp://guest:guest@localhost//'
@@ -58,10 +58,17 @@ INSTALLED_APPS = [
 
     'weblog.apps.WeblogConfig',
     'dashboard.apps.DashboardConfig',
+    'survey.apps.SurveyConfig',
     'django_celery_beat',
     'django_celery_results'
 ]
-
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+    'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

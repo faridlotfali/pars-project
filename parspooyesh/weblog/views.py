@@ -20,6 +20,8 @@ from django.utils.encoding import force_bytes,force_text
 #paginate
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from log_package import log
+
 from django.contrib.auth.models import User
 from .models import Post,Comment,slider
 from django.db.models import Q
@@ -29,7 +31,9 @@ from django.conf import settings
 from django.core.mail import send_mail
 
 #rest 
-from . import serializers
+from .serializers import * 
+from rest_framework import mixins, generics
+
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework import status
@@ -38,6 +42,19 @@ from rest_framework.response import Response
 
 from django.core.files.storage import FileSystemStorage
 
+from django.views.decorators.csrf import csrf_exempt
+import json
+from weblog.bot_utils import send_message
+
+@csrf_exempt
+def event(request):
+    # return JsonResponse({'status':'true' , 'message': 'worked' })
+    json_list = json.loads(request.body)
+    chat_id = json_list['message']['chat']['id']
+    print(chat_id)
+    send_message(json_list['message']['text'],chat_id)
+    return HttpResponse()
+    
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -95,7 +112,6 @@ class SignUp3(APIView):
         #do something with 'GET' method
         # return Response("some data")
         serializer = serializers.MyUserSerializer(data=request.data)
-        print(request.data)
         if serializer.is_valid():
             user = serializer.save()
             if user:
@@ -106,7 +122,6 @@ class SignUp3(APIView):
 
     def post(self, request, format='json'):
         serializer = serializers.MyUserSerializer(data=request.data)
-        print(request.data)
         if serializer.is_valid():
             user = serializer.save()
             if user:
@@ -126,10 +141,17 @@ def loginn2(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
+                log.loging(username,request,'login')
                 # return redirect('weblog:index')
         else: 
             return JsonResponse({"success": false ,"error": "username or password not exists"})        
     return redirect('weblog:login')
+
+def logout_view(request):  
+    username = request.user     
+    logout(request)
+    log.loging(username,request,'logout')
+    return redirect('weblog:index')
 
 def loginn(request):
     username = password = ''
@@ -140,6 +162,7 @@ def loginn(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
+                log.loging(username,request,'login')
                 return redirect('weblog:index')         
     return render(request ,'weblog/login.html')
 
@@ -178,7 +201,7 @@ class ResultsView(DetailView):
     model = Post
     template_name = 'weblog/results.html'
 
-class PostListView(ListView):
+class PostListView2(ListView):
     model = Post
     template_name = 'weblog/index.html'
     context_object_name = 'posts'  # Default: object_list
@@ -188,7 +211,40 @@ class PostListView(ListView):
     def get_context_data(self,*args,**kwargs): 
         context = dict()  
         mostseen = Post.objects.all().order_by('-seen')[:3]
-        print(mostseen)
+        slide = []
+        for data in slider.objects.all(): 
+            slide.append (list(Post.objects.filter(pk = data.image_id))[0] )
+        context = super(PostListView2, self).get_context_data(*args, **kwargs)
+        context['slider']=slide
+        context['mostseen']=mostseen
+        return context      
+
+class PostListView(mixins.ListModelMixin,
+                mixins.CreateModelMixin,
+                generics.GenericAPIView):
+    serializer_class = PostSerializer            
+    # model = Post
+    template_name = 'weblog/index.html'
+    # context_object_name = 'posts'  # Default: object_list
+    # paginate_by = 6 
+    queryset = Post.objects.all()
+    def get(self, request, *args, **kwargs):
+        queryset = Post.objects.all()
+        return self.list(request, *args, **kwargs)
+        # return Response({'profiles': queryset})
+
+    def list(self, request):
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        queryset = self.get_queryset()
+        serializer = PostSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def get_context_data(self,*args,**kwargs): 
+        context = dict()  
+        mostseen = Post.objects.all().order_by('-seen')[:3]
         slide = []
         for data in slider.objects.all(): 
             slide.append (list(Post.objects.filter(pk = data.image_id))[0] )
@@ -197,12 +253,12 @@ class PostListView(ListView):
         context['mostseen']=mostseen
         return context      
 
+
 class PostDetailView(DetailView):
     def get_queryset(self):
         post = Post.objects.filter(slug =self.kwargs['slug'])[0]
         post.seen += 1
         post.save()
-        print(post.seen)
         return Post.objects.filter(slug =self.kwargs['slug'])
 
 class PostCreateView(CreateView):
@@ -216,6 +272,11 @@ class PostCreateView(CreateView):
         context = super(PostCreateView, self).get_context_data(*args, **kwargs)       
         context['title'] = 'Create Item'
         return context
+
+    def get_form_kwargs(self):
+        kwargs = super(PostCreateView,self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         model = form.save(commit=False)
@@ -234,6 +295,16 @@ class PostUpdateView(UpdateView):
         context = super(PostUpdateView, self).get_context_data(*args, **kwargs)       
         context['title'] = 'Update Item'
         return context     
+
+    def get_form_kwargs(self):
+        kwargs = super(PostUpdateView,self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        model = form.save(commit=False)
+        model.author = self.request.user
+        return super(PostUpdateView, self).form_valid(form)
 
 class CommentCreateView(CreateView):
     template_name = 'weblog/form.html'
