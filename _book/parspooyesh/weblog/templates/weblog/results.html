@@ -1,0 +1,26 @@
+{% extends 'weblog/base.html' %}
+
+{% block head_title %}results || {{ block.super }}{% endblock head_title %}
+
+{% block content %} 
+<div class="results container">
+    <div class="row">
+        <div class="col-12">
+        <h1>{{ post.post_text }}</h1>
+        </div>   
+        <div class="col-12">
+        <ul>
+            <div class="row">
+            {% for comment in post.comment_set.all %}
+            <div class="col-md-12">
+                <li>{{ comment.comment_text }} -- {{ comment.votes }} vote{{ comment.votes|pluralize }}</li>
+            </div>    
+            {% endfor %}
+            </div>  
+        </ul>
+    </div>      
+        <a href="{% url 'weblog:detail' post.slug %}">Vote again?</a>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,29 @@
+{% load static %}
+{% load footer_tags %}
+{% load header_tags %}
+<html>
+<head>    <link rel="stylesheet" type="text/css" href="{% static 'weblog/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'weblog/css/main.css' %}" />
+    <script src="{% static 'weblog/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'weblog/js/jquery3.3.1.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'weblog/css/bootstrap.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'weblog/css/main.css' %}" />
+<script src="{% static 'weblog/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'weblog/js/jquery3.3.1.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<title>{% block head_title %}ParsPooyesh{% endblock head_title %}</title>
+</head>
+<body>    
+    {% include 'weblog/header.html' %}
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
+<div class="container">
+    <div class="large-4 columns">
+    {% include 'weblog/footer.html' %}
+    </div>
+</div>
+</body>
+</html>
+

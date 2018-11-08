@@ -1,0 +1,106 @@
+body{
+  background-color: F6F6F6 !important;
+}
+ul{
+  list-style: none;
+}
+li a {
+  color: #495057;
+  text-decoration: none;
+}
+label{
+  font-weight: 600;
+}
+.posts ul{
+  width: 100%; 
+  padding: 0 2em 0 0;
+  margin: 0;
+}
+.posts img{
+  width: 20%;
+  float: left;
+  padding: .5em 1em;
+}
+.carousel-inner img{
+   height: 100%;
+  width: 100% !important;
+  margin: 0 auto !important;
+}
+.carousel-inner{
+  height: 100% !important;
+  width: auto !important;
+  margin: 0 auto !important;
+} 
+.carousel-control-prev{
+  height: 100% !important;
+}
+.carousel-control-next{
+  height: 100% !important;
+}
+.carousel-control-prev-icon{
+  height: 100% !important;
+} 
+.carousel-control-next-icon{
+  height: 100% !important;
+}
+.carousel{
+  height: 20em;
+  margin-bottom: 1em;
+}
+#Hiusername{
+  float: left;
+  margin: 0;
+}
+.index-form a{
+  height:60px;
+  line-height:20px; /* Height / no. of lines to display */
+  overflow:hidden;
+  display: block;
+}
+.Search-pannel{
+  float: right;
+  margin: 2em 0;
+}
+.slide{
+  margin: 2em 0;
+}
+.navbar{
+  font-size: .9em ;
+  padding: .1em  !important;
+  background-color: E0E0E0;
+}
+.form-inline *{
+  font-size: .9em !important;
+}
+.menu{
+  direction: rtl;
+  float: right;
+  width: 100%
+}
+@media (min-width: 576px) {
+  /* change this, by default 540px */
+   .container {
+     max-width: 530px !important;
+  }
+}
+
+@media (min-width: 768px) {
+  /* change this, by default 720px */
+  .container {
+  max-width: 710px !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: 1190px !important;
+  }
+}
+
+.col-centered{
+  float: none;
+  margin: 0 auto;
+}
+.comment-btn{
+  float: right;
+}

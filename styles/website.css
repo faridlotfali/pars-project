@@ -1,0 +1,14 @@
+@font-face {
+    font-family: yekan;
+    src: url(../fonts/iranyekan/iranyekanwebregular.woff);
+}
+html *{
+    /* direction: rtl; */
+}
+a,p,h1,h2,h3,h4,h5,h6{
+    font-family: b yekan !important;
+    padding-right: .5em;
+}
+h1,h2,h3,h4,h5,h6{
+    padding-right: .5em;
+}
