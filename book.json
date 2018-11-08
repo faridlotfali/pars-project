@@ -1,4 +1,7 @@
 {
+    "title" : "کارآموزی",
+    "description" : "کارآموزی",
+    "pdf.margin.right" : "0px",
     "styles": {
         "website": "styles/website.css",
         "ebook": "styles/website.css",
