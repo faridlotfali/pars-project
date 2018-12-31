@@ -1,5 +1,5 @@
 #  روز چهاردهم
 
-### <center> ایجاد صفحه پست ها </center>
+### <center> اتصال django و angular </center>
 
 
