@@ -79,9 +79,10 @@ class PostListView(mixins.ListModelMixin,
         context['slider']=slide
         context['mostseen']=mostseen
         return context      
+```
 
 این کلاس برای نمایش یک تک پست به کار برده میشود و جزییات یک پست را به تمپلیت مد نطر ارسال میکند.
-
+```
 class PostDetailView(DetailView):
     def get_queryset(self):
         post = Post.objects.filter(slug =self.kwargs['slug'])[0]
@@ -110,10 +111,12 @@ class PostCreateView(CreateView):
         model = form.save(commit=False)
         model.author = self.request.user
         return super(PostCreateView, self).form_valid(form)
-       
+```       
 
 این کلاس نیز برای ایجاد تغییرات در هر پست به کار برده میشود 
 
+
+```
 class PostUpdateView(UpdateView):
     template_name = 'weblog/form.html'
     form_class = PostForm
