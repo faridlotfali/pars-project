@@ -1,6 +1,26 @@
 #  روز یازدهم
 
 ### <center> اضافه کردن celery </center>
+برای ایجاد تسک های مشخص در زمان های مشخص و شرایط معین از celery استفاده میکنیم.
+
+بطور خلاصه celery چطوری کار می‌کنه؟
+
+جنگو به یک message broker (اینجا ما از RabbitMQ استفاده کردیم ولی شما می‌تونین از ردیس یا چیزهای دیگه هم استفاده کنین) یک پیامی (تسکی) را می‌فرسته. message broker هم این پیام را به یکی از ورکرهایی که مختص این کاره ارجاع می‌دهد. در مرحله‌ی آخر هم ورکر مربوطه کار را در پشت پرده انجام می‌دهد.
+
+
+در ابتدا RabbitMQ را نصب میکنیم.سپس تنظیمات زیر را به جنگو اضافه میکنیم.
+
+```
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost//'
+CELERY_RESULT_BACKEND = 'amqp://guest:guest@localhost//'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+```
+
+بعد از وارد کردن تنظیمات تسک های مد نظر خود ار وارد میکنیم.
+در نمونه کد زیر سه تسک مختلف را میخواهیم در زمان های مختلف انجام دهیم.
+این تسک ها عبارتند از تابع های ```multiply_two_numbers``` و ```tasks.add```
 
 
 ```
@@ -15,10 +35,6 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'parspooyesh.settings')
 
 app = Celery('parspooyesh')
 
-# Using a string here means the worker don't have to serialize
-# the configuration object to child processes.
-# - namespace='CELERY' means all celery-related configuration keys
-#   should have a `CELERY_` prefix.
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # Load task modules from all registered Django app configs.
@@ -46,4 +62,23 @@ app.conf.beat_schedule = {
     #     'args': (16, 16)
     # },
 }  
+```
+جزییات تابع های گفته شده در زیر آمده است که یک تابع جمع و یک تابع ضرب نوشته شده است.
+```
+from __future__ import absolute_import, unicode_literals
+import random
+from celery.decorators import task
+
+@task(name="sum_two_numbers")
+def add(x, y):
+    return x + y
+
+@task(name="multiply_two_numbers")
+def mul(x, y):
+    total = x * (y * random.randint(3, 100))
+    return total
+
+@task(name="sum_list_numbers")
+def xsum(numbers):
+    return sum(numbers)
 ```
