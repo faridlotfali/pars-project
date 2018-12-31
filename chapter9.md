@@ -29,6 +29,8 @@ def header_settings(value,args=None):
     return header_title
 
 ```
+
+سپس به این علت که site setting در اغلب صفخات حضور دارد از تمپلیت تک استفاده میکنیم.
 ```
 from django import template
 from ..models import SiteSettings
@@ -47,7 +49,34 @@ def footer_settings(value,args = None):
     return footer
 ```
     
+مدل اسلایدر را نبز به شکل زیر تعریف میکنیم  و از تمپلیت تک ها برای نمایش آن در صفخات استفاده میکنیم
 ```
 class slider(models.Model):
     image = models.ForeignKey('post', on_delete=models.CASCADE)
 ```
+طرز نمایش اسلایدر در صفخه اصلی به شکل زیر است 
+```
+{% load static%}
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            {%  for  data in slider|slice:":3" %}
+            <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
+                <img class="img-fluid" src="{{data.post_img.url}}">
+            </div>
+            {% endfor%}
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+</div>
+````
