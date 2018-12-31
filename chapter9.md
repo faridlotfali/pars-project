@@ -30,7 +30,7 @@ def header_settings(value,args=None):
 
 ```
 
-سپس به این علت که site setting در اغلب صفخات حضور دارد از تمپلیت تک استفاده میکنیم.
+سپس به این علت که site setting در اغلب صفحات حضور دارد از تمپلیت تک استفاده میکنیم.
 ```
 from django import template
 from ..models import SiteSettings
@@ -49,7 +49,7 @@ def footer_settings(value,args = None):
     return footer
 ```
     
-مدل اسلایدر را نبز به شکل زیر تعریف میکنیم  و از تمپلیت تک ها برای نمایش آن در صفخات استفاده میکنیم
+مدل اسلایدر را نیز به شکل زیر تعریف میکنیم  و از تمپلیت تگ ها برای نمایش آن در صفحات استفاده میکنیم
 ```
 class slider(models.Model):
     image = models.ForeignKey('post', on_delete=models.CASCADE)
