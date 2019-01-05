@@ -88,11 +88,11 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
 #     link_name =  models.CharField(max_length=100, blank=False)
 #     link =  models.TextField(max_length=500, blank=False)
 
-#     def __str__(self):
+#     def __strinstance.profile.save()__(self):
 #         return self.link_name 
 
 class SiteSettings(models.Model):
-    key_name = models.CharField(max_length=50)    
+    key_name = instance.profile.save()models.CharField(max_length=50)    
     key_value = models.TextField(max_length=500)    
 
     def __str__(self):

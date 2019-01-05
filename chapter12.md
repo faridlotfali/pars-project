@@ -1,10 +1,18 @@
 #  روز دوازدهم
 
 ### <center> ایجاد ماژول کامنت گذاری با angular </center>
+
+انگولار ابزاری مناسب برای توسعه صفحات وب که له صورت تک صفحه ای هستند میباشند .
+در این روز تصمیم گرفتم تا قسمت کامنت وبلاگ را با انگولار توسعه بدهم.
+
+در ابتدا دو component هدر و هوم ایجاد کردم
 ```
 <app-header></app-header>
 <app-home></app-home>
 ```
+
+قسمت templateUrl مشخص میکند که از چه صفحه  html خوانده شود
+قسمت styleUrls مشخص میکند که از چه   css خوانده شود
 
 
 ```
@@ -53,7 +61,7 @@ export class HomeComponent implements OnInit {
 }
 ```
 
-
+در زیر قسمتی از صفحه html آمده است
 ```
 <div style="width: 400px; margin: 2em; ">
   <label for="comment">Comment</label>
@@ -83,6 +91,8 @@ export class HomeComponent implements OnInit {
 </div>
 ```
 
+
+کد زیر مربوط به قسمت هدر وبلاگ میباشد.
 ```
 <nav class="navbar navbar-expand-lg ">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
